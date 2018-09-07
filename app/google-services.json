@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "369925176086",
+    "firebase_url": "https://mmtextilesandroid.firebaseio.com",
+    "project_id": "mmtextilesandroid",
+    "storage_bucket": "mmtextilesandroid.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:369925176086:android:ff13409e1d114b83",
+        "android_client_info": {
+          "package_name": "in.beyonitysoftwares.shopapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "369925176086-kuurjagr9dtcioheaoo3a8pl0tm16o9j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "in.beyonitysoftwares.shopapp",
+            "certificate_hash": "25b4ba3ab6df778177aa5ade8bcfa997abccbfc1"
+          }
+        },
+        {
+          "client_id": "369925176086-aecfhqe41222ap4oj01o9bb0bdhdrn5u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBvHmGudN1yXg0g3cE4JEO2OAetRlG4hc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "369925176086-aecfhqe41222ap4oj01o9bb0bdhdrn5u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
