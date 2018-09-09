@@ -35,7 +35,7 @@ import com.google.firebase.messaging.RemoteMessage;
 
 import java.util.Map;
 
-import in.beyonitysoftwares.shopapp.MainActivity;
+import in.beyonitysoftwares.shopapp.activities.MainActivity;
 import in.beyonitysoftwares.shopapp.R;
 
 public class NotificationService extends FirebaseMessagingService {

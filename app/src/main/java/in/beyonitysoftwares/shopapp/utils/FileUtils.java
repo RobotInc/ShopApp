@@ -1,4 +1,4 @@
-package in.beyonitysoftwares.shopapp;
+package in.beyonitysoftwares.shopapp.utils;
 
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -20,8 +20,10 @@ import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.List;
 
-import static in.beyonitysoftwares.shopapp.LogUtils.LOGD;
-import static in.beyonitysoftwares.shopapp.LogUtils.LOGE;
+import in.beyonitysoftwares.shopapp.R;
+
+import static in.beyonitysoftwares.shopapp.utils.LogUtils.LOGD;
+import static in.beyonitysoftwares.shopapp.utils.LogUtils.LOGE;
 
 /**
  * Created by k2 on 30/6/17.

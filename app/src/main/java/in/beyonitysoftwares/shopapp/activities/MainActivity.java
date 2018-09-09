@@ -1,18 +1,15 @@
-package in.beyonitysoftwares.shopapp;
+package in.beyonitysoftwares.shopapp.activities;
 
 import android.Manifest;
-import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -59,29 +56,37 @@ import com.itextpdf.layout.border.SolidBorder;
 import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
-import com.itextpdf.layout.element.Text;
 import com.itextpdf.layout.property.TextAlignment;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
 
+import in.beyonitysoftwares.shopapp.utils.FileUtils;
+import in.beyonitysoftwares.shopapp.R;
+import in.beyonitysoftwares.shopapp.adapters.ViewPagerAdapter;
 import in.beyonitysoftwares.shopapp.config.AppConfig;
+import in.beyonitysoftwares.shopapp.custom.CustomViewPager;
 import in.beyonitysoftwares.shopapp.databaseHandler.SQLiteSignInHandler;
 import in.beyonitysoftwares.shopapp.databaseHandler.SessionManager;
+import in.beyonitysoftwares.shopapp.fragments.customers;
+import in.beyonitysoftwares.shopapp.fragments.invoices;
+import in.beyonitysoftwares.shopapp.fragments.products;
 
 import static android.gesture.GestureLibraries.fromFile;
-import static in.beyonitysoftwares.shopapp.LogUtils.LOGE;
+import static in.beyonitysoftwares.shopapp.utils.LogUtils.LOGE;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = "MainActivity";
     final int REQUEST_CODE_PERMISSION = 101;
+    ViewPagerAdapter adapter;
+    CustomViewPager vg;
     SessionManager session;
     SQLiteSignInHandler db;
     FirebaseAuth mAuth;
@@ -94,43 +99,35 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
-
-        checkPermissions();
-
-
-
-    }
-
-    public void checkSignIn(){
         session = new SessionManager(getApplicationContext());
         db = new SQLiteSignInHandler(getApplicationContext());
+        mAuth = FirebaseAuth.getInstance();
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        mAuth = FirebaseAuth.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
-        if(!session.isLoggedIn()||user==null){
+        checkPermissions();
+    }
+
+    public void checkSignIn(){
+     if(!session.isLoggedIn()||user==null){
+            Log.d(TAG, "checkSignIn: am in sign in");
             signIn();
         }else {
+            Log.d(TAG, "checkSignIn: am in else"+user.getDisplayName());
             init();
         }
+     //   Log.d(TAG, "checkSignIn: "+user.getDisplayName());
+       // Log.d(TAG, "checkSignIn: "+user.getUid());
+        //Log.d(TAG, "checkSignIn: "+user.getEmail());
+        //signIn();
     }
 
     public void init(){
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -142,17 +139,28 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         //createPdf(FileUtils.getAppPath(getApplicationContext()) + "123.pdf");
 
-        View view = navigationView.getRootView();
+        View view = navigationView.getHeaderView(0);
         ImageView profile = (ImageView) view.findViewById(R.id.profile);
-        profile.setImageURI(user.getPhotoUrl());
+        Picasso.get()
+                .load(user.getPhotoUrl())
+                .into(profile);
         TextView displayname = (TextView) view.findViewById(R.id.displayname);
         displayname.setText(user.getDisplayName());
         TextView email = (TextView) view.findViewById(R.id.useremail);
         email.setText(user.getEmail());
+        vg = (CustomViewPager) findViewById(R.id.vg);
+        adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new invoices(),"");
+        adapter.addFragment(new customers(), "");
+        adapter.addFragment(new products(),"");
+        vg.setAdapter(adapter);
+        vg.setPagingEnabled(false);
+
     }
 
 
     private void signIn() {
+
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
@@ -770,7 +778,17 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        if(id == R.id.customers){
+            vg.setCurrentItem(1);
+        }
 
+        if(id == R.id.invoice){
+            vg.setCurrentItem(0);
+        }
+
+        if(id == R.id.products){
+            vg.setCurrentItem(2);
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

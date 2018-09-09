@@ -48,5 +48,7 @@ dependencies {
 
     //fast networking
     implementation 'com.amitshekhar.android:jackson-android-networking:1.0.2'
+    implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'com.github.barteksc:android-pdf-viewer:3.1.0-beta.1'
 }
 apply plugin: 'com.google.gms.google-services'

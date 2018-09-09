@@ -1,4 +1,4 @@
-package in.beyonitysoftwares.shopapp;
+package in.beyonitysoftwares.shopapp.utils;
 
 import android.util.Log;
 
