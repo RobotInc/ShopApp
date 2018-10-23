@@ -6,12 +6,32 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import in.beyonitysoftwares.shopapp.R;
 import in.beyonitysoftwares.shopapp.activities.newCustomer;
+import in.beyonitysoftwares.shopapp.adapters.customerAdapter;
+import in.beyonitysoftwares.shopapp.config.AppConfig;
+import in.beyonitysoftwares.shopapp.model.customer;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -22,11 +42,14 @@ import in.beyonitysoftwares.shopapp.activities.newCustomer;
  * create an instance of this fragment.
  */
 public class customers extends Fragment {
+    private static final String TAG = "customers";
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    RecyclerView rv;
+    List<customer> customersList = new ArrayList<>();
+    customerAdapter adapter;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -69,7 +92,14 @@ public class customers extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_customers, container, false);
-
+        adapter = new customerAdapter(customersList,getContext());
+        rv = (RecyclerView) view.findViewById(R.id.customerrv);
+        rv.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
+        rv.setItemAnimator(new DefaultItemAnimator());
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        rv.setLayoutManager(layoutManager);
+        rv.setAdapter(adapter);
+        getCustomers();
         return view;
     }
 
@@ -100,5 +130,44 @@ public class customers extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+    public void getCustomers(){
+
+        AndroidNetworking.post(AppConfig.GET_CUSTOMER)
+                .addBodyParameter("name","name")
+                .setTag("Customers")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG, "onResponse: "+response);
+                        customersList.clear();
+                        try {
+                            boolean error = response.getBoolean("error");
+                            if(!error){
+                                JSONArray array = response.getJSONArray("customers");
+                                for(int a = 0;a<array.length();a++){
+                                    JSONObject object = array.getJSONObject(a);
+                                    customer c = new customer();
+                                    c.setName(object.getString("name"));
+                                    c.setAddress(object.getString("address"));
+                                    customersList.add(c);
+                                }
+
+                                adapter.notifyDataSetChanged();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.d(TAG, "onError: "+anError.getErrorDetail());
+                    }
+                });
+
+
     }
 }

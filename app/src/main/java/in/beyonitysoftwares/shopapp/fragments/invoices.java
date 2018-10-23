@@ -3,9 +3,11 @@ package in.beyonitysoftwares.shopapp.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 
 import in.beyonitysoftwares.shopapp.R;
 
@@ -15,6 +17,7 @@ import in.beyonitysoftwares.shopapp.R;
  * create an instance of this fragment.
  */
 public class invoices extends Fragment {
+    private static final String TAG = "invoices";
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -62,7 +65,7 @@ public class invoices extends Fragment {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_invoices, container, false);
         //getActivity().getActionBar().setTitle("Invoices");
-        return view;
+              return view;
     }
 
 }

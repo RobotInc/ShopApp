@@ -13,12 +13,19 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
+
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import in.beyonitysoftwares.shopapp.R;
+import in.beyonitysoftwares.shopapp.config.AppConfig;
+import in.beyonitysoftwares.shopapp.model.customer;
 import in.beyonitysoftwares.shopapp.utils.Helper;
 
 public class newCustomer extends AppCompatActivity {
@@ -28,7 +35,7 @@ public class newCustomer extends AppCompatActivity {
     ArrayAdapter stateAdapter;
     List<String> stateList = new ArrayList<>();
     Button addcustomer;
-    EditText legalname,tradename,gstin,address,pincode,phone;
+    EditText tradename,gstin,address,pincode,phone;
     boolean isRegistered = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +45,7 @@ public class newCustomer extends AppCompatActivity {
 
 
         tradename = (EditText) findViewById(R.id.tradename);
-        legalname = (EditText) findViewById(R.id.legalname);
+
         gstin= (EditText) findViewById(R.id.gstin);
         address= (EditText) findViewById(R.id.Address);
         phone = (EditText) findViewById(R.id.phone);
@@ -65,22 +72,21 @@ public class newCustomer extends AppCompatActivity {
             Log.d(TAG, "onCreate: ");
             stateList.add(names);
         }
+
+
         
         stateAdapter.notifyDataSetChanged();
         addcustomer = (Button) findViewById(R.id.addcustomer);
         addcustomer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(TextUtils.isEmpty(tradename.getText())||TextUtils.isEmpty(legalname.getText())||TextUtils.isEmpty(address.getText())||TextUtils.isEmpty(gstin.getText())||TextUtils.isEmpty(pincode.getText())||TextUtils.isEmpty(phone.getText())){
+                if(TextUtils.isEmpty(tradename.getText())||TextUtils.isEmpty(address.getText())||TextUtils.isEmpty(gstin.getText())||TextUtils.isEmpty(pincode.getText())||TextUtils.isEmpty(phone.getText())){
                     Toast.makeText(getApplicationContext(),"All Fields Required",Toast.LENGTH_LONG).show();
                     return;
                 }
 
 
-                if(legalname.getText().length()<3){
-                    legalname.setError("Not a valid name");
-                    return;
-                }
+
                 if(tradename.getText().length()<3){
                     tradename.setError("Not a valid name");
                     return;
@@ -106,13 +112,54 @@ public class newCustomer extends AppCompatActivity {
 
                     if(gstinlength==15){
                         isRegistered = true;
+                    }else {
+                        isRegistered = false;
                     }
-                    Toast.makeText(newCustomer.this, "Perfect", Toast.LENGTH_SHORT).show();
+
+                    customer c = new customer();
+                    c.setName(tradename.getText().toString());
+                    c.setGstin(gstin.getText().toString());
+                    c.setAddress(address.getText().toString());
+                    c.setState(states.getSelectedItem().toString());
+                    c.setPincode(pincode.getText().toString());
+                    c.setPhone(phone.getText().toString());
+                    c.setRegistered(isRegistered);
+                    regCustomer(c);
+
                 }else {
                     gstin.setError("Enter Valid Text");
                 }
             }
         });
+
+
+    }
+
+
+    public void regCustomer(customer c){
+
+        AndroidNetworking.post(AppConfig.REG_CUSTOMER)
+                .addBodyParameter("name",c.getName())
+                .addBodyParameter("gstin",c.getGstin())
+                .addBodyParameter("registered",String.valueOf(c.isRegistered()))
+                .addBodyParameter("address",c.getAddress())
+                .addBodyParameter("state",c.getState())
+                .addBodyParameter("pincode",c.getPincode())
+                .addBodyParameter("phone",c.getPhone())
+                .setTag("Register Customer")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG, "onResponse: "+response);
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.d(TAG, "onError: "+anError.getErrorDetail());
+                    }
+                });
 
 
     }

@@ -4,19 +4,36 @@ public class customer {
     int id;
     String name;
     String gstin;
-    String registered;
+    boolean registered;
     String address;
     String state;
     String phone;
+    String pincode;
+
+
+    public String getPincode() {
+        return pincode;
+    }
+
+    public void setPincode(String pincode) {
+        this.pincode = pincode;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public customer(){
 
     }
     public customer(int id,String name, String gstin, String registered,String state, String address, String phone) {
         this.id = id;
-        this.name = name;
-        this.gstin = gstin;
-        this.registered = registered;
+           this.gstin = gstin;
+
         this.address = address;
         this.state = state;
         this.phone = phone;
@@ -30,13 +47,7 @@ public class customer {
         this.state = state;
     }
 
-    public String getName() {
-        return name;
-    }
 
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public String getGstin() {
         return gstin;
@@ -46,11 +57,11 @@ public class customer {
         this.gstin = gstin;
     }
 
-    public String getRegistered() {
+    public boolean isRegistered() {
         return registered;
     }
 
-    public void setRegistered(String registered) {
+    public void setRegistered(boolean registered) {
         this.registered = registered;
     }
 
