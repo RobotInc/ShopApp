@@ -43,7 +43,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.new_product"></activity>
+        <activity android:name=".activities.new_product" />
+        <activity android:name=".activities.new_invoice"></activity>
     </application>
 
 </manifest>
