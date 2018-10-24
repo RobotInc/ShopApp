@@ -21,6 +21,7 @@ import org.json.JSONObject;
 import in.beyonitysoftwares.shopapp.R;
 import in.beyonitysoftwares.shopapp.config.AppConfig;
 import in.beyonitysoftwares.shopapp.model.customer;
+import in.beyonitysoftwares.shopapp.utils.Helper;
 
 public class new_product extends AppCompatActivity {
     Button addproduct;
@@ -60,6 +61,7 @@ public class new_product extends AppCompatActivity {
                             if(!error){
                                 Toast.makeText(new_product.this, "Successfully added the product "+name, Toast.LENGTH_SHORT).show();
                                 pname.setText("");
+                                Helper.refreshProductList();
                             }else {
                                 Toast.makeText(new_product.this, "Error Adding the product to the list", Toast.LENGTH_SHORT).show();
                             }

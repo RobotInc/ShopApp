@@ -65,7 +65,7 @@ public class invoices extends Fragment {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_invoices, container, false);
         //getActivity().getActionBar().setTitle("Invoices");
-              return view;
+        return view;
     }
 
 }

@@ -31,6 +31,7 @@ import in.beyonitysoftwares.shopapp.adapters.customerAdapter;
 import in.beyonitysoftwares.shopapp.config.AppConfig;
 import in.beyonitysoftwares.shopapp.model.Product;
 import in.beyonitysoftwares.shopapp.model.customer;
+import in.beyonitysoftwares.shopapp.utils.Helper;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -84,6 +85,9 @@ public class products extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        productList.clear();
+        productList.addAll(Helper.getProductList());
+        adapter = new ProductAdapter(productList,getContext());
     }
 
     @Override
@@ -91,14 +95,14 @@ public class products extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_products, container, false);
-        adapter = new ProductAdapter(productList,getContext());
+
         rv = (RecyclerView) view.findViewById(R.id.productrv);
         rv.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
         rv.setItemAnimator(new DefaultItemAnimator());
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         rv.setLayoutManager(layoutManager);
         rv.setAdapter(adapter);
-        getproducts();
+
         return view;
     }
 
@@ -174,6 +178,12 @@ public class products extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        getproducts();
+        if(productList!=null && adapter!=null) {
+            productList.clear();
+            productList.addAll(Helper.getProductList());
+            adapter.notifyDataSetChanged();
+        }
     }
+
+
 }

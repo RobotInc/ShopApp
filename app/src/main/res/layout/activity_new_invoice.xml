@@ -43,154 +43,175 @@
 
 
         </RelativeLayout>
-
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="15dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="15dp"
-                android:textStyle="bold"
-                android:text="Invoice No"/>
-
+            android:layout_height="match_parent">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <EditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:layout_marginEnd="20dp"
-                    android:inputType="number"
-                    android:id="@+id/invoiceno"/>
+                android:padding="15dp"
+                android:orientation="vertical">
+
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="15dp"
+                    android:textSize="17dp"
                     android:textStyle="bold"
-                    android:layout_weight="1"
-                    android:id="@+id/yearview"
-                    android:text="/2018-19"/>
+                    android:text="Invoice No"/>
 
-            </LinearLayout>
-
-
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="15dp"
-                android:textStyle="bold"
-                android:text="Date and Transport"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <EditText
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:hint="Jan 01 2018"
-                    android:layout_marginEnd="20dp"
-                    android:inputType="datetime"
-                    android:id="@+id/invoicedate"/>
-               <Spinner
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:id="@+id/spinnertransport"
-                   android:layout_weight="2"></Spinner>
+                    android:orientation="horizontal">
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:layout_marginEnd="20dp"
+                        android:inputType="number"
+                        android:id="@+id/invoiceno"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15dp"
+                        android:textStyle="bold"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:id="@+id/yearview"
+                        android:text="/2018-19"/>
+
+                </LinearLayout>
+
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="17dp"
+                    android:textStyle="bold"
+                    android:text="Date and Transport"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="Jan 01 2018"
+                        android:layout_marginEnd="20dp"
+                        android:inputType="datetime"
+                        android:id="@+id/invoicedate"/>
+                    <Spinner
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/spinnertransport"
+                        android:layout_gravity="center"
+                        android:layout_weight="2"></Spinner>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2px"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@color/colorAccent"
+                    android:visibility="visible"></View>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="17dp"
+                    android:textStyle="bold"
+                    android:text="Bill To"/>
+
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/spinnerbillto"/>
+
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="17dp"
+                    android:layout_marginTop="15dp"
+                    android:textStyle="bold"
+                    android:text="Ship To"/>
+
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/spinnershipto"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:id="@+id/placetoship"
+                    android:text="Shipping To Place"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2px"
+                    android:background="@color/colorAccent"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:visibility="visible"></View>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="17dp"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:layout_weight="3"
+                        android:textStyle="bold"
+                        android:layout_marginTop="10dp"
+                        android:text="Products"/>
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/addproducts"
+                        android:background="@color/colorPrimaryDark"
+                        android:textColor="@color/white"
+                        android:text="Add"/>
+
+                </LinearLayout>
+
+
+                <android.support.v7.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/addproductrv"/>
+
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Add Invoice"
+                    android:id="@+id/addinvoice"
+                    android:layout_marginTop="30dp"
+                    android:textColor="@android:color/white"
+                    android:background="@color/colorAccent"/>
 
             </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
-                android:visibility="visible"></View>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:textSize="15dp"
-                android:textStyle="bold"
-                android:text="Bill To"/>
+        </ScrollView>
 
-            <Spinner
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/spinnerbillto"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="15dp"
-                android:layout_marginTop="15dp"
-                android:textStyle="bold"
-                android:text="Ship To"/>
-
-            <Spinner
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/spinnershipto"/>
-
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
-                android:visibility="visible"></View>
-
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="15dp"
-                android:textStyle="bold"
-                android:layout_marginTop="10dp"
-                android:text="Pincode"/>
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:maxLength="6"
-                android:inputType="phone"
-                android:id="@+id/pincode"/>
-
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="15dp"
-                android:textStyle="bold"
-                android:text="Phone Number"/>
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:maxLength="10"
-                android:inputType="phone"
-                android:id="@+id/phone"/>
-
-
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Add Customer"
-                android:id="@+id/addcustomer"
-                android:layout_marginTop="15dp"
-                android:textColor="@android:color/white"
-                android:background="@color/colorAccent"/>
-
-        </LinearLayout>
 
     </LinearLayout>
 

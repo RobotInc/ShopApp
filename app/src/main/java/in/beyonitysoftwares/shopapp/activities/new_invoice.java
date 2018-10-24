@@ -12,4 +12,10 @@ public class new_invoice extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_invoice);
     }
+
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 }

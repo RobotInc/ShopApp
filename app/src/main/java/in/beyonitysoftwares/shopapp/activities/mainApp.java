@@ -47,9 +47,8 @@ public class mainApp extends AppCompatActivity {
     CustomViewPager vg;
     SessionManager session;
     SQLiteSignInHandler db;
-
     int RC_SIGN_IN = 1;
-
+    boolean isinit = false;
     String[] mPermission = {Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE};
     TextView appbar;
     ImageView add;
@@ -113,27 +112,24 @@ public class mainApp extends AppCompatActivity {
                 }if(vg.getCurrentItem()==2){
                     Intent intent = new Intent(mainApp.this,new_product.class);
                     startActivity(intent);
+                }if (vg.getCurrentItem()==0){
+                    Intent intent = new Intent(mainApp.this,new_invoice.class);
+                    startActivity(intent);
                 }
             }
         });
+
         vg = (CustomViewPager) findViewById(R.id.vg);
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new invoices(),"");
-        adapter.addFragment(new customers(), "");
-        adapter.addFragment(new products(),"");
+        adapter.addFragment(Helper.getInvoice(),"");
+        adapter.addFragment(Helper.getCustomer(), "");
+        adapter.addFragment(Helper.getProduct(),"");
         adapter.addFragment(new settings(),"");
         vg.setAdapter(adapter);
         vg.setPagingEnabled(false);
         appbar.setText("M M Textiles - Invoices");
-
+        Helper.refreshCustomerList();
+        Helper.refreshProductList();
     }
-
-
-
-
-
-
-
-
 
 }

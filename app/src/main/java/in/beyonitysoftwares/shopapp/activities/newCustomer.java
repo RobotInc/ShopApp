@@ -18,6 +18,7 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -153,6 +154,17 @@ public class newCustomer extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d(TAG, "onResponse: "+response);
+                        try {
+                            boolean error = response.getBoolean("error");
+                            if(!error){
+                                Toast.makeText(newCustomer.this, "Successfully added Customer", Toast.LENGTH_SHORT).show();
+                                Helper.refreshCustomerList();
+                            }else {
+                                Toast.makeText(newCustomer.this, "Error Adding the customer to the list", Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
 
                     @Override

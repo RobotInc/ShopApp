@@ -32,6 +32,7 @@ import in.beyonitysoftwares.shopapp.activities.newCustomer;
 import in.beyonitysoftwares.shopapp.adapters.customerAdapter;
 import in.beyonitysoftwares.shopapp.config.AppConfig;
 import in.beyonitysoftwares.shopapp.model.customer;
+import in.beyonitysoftwares.shopapp.utils.Helper;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -85,6 +86,9 @@ public class customers extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        customersList.clear();
+        customersList.addAll(Helper.getCustomerList());
+        adapter = new customerAdapter(customersList,getContext());
     }
 
     @Override
@@ -92,14 +96,13 @@ public class customers extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_customers, container, false);
-        adapter = new customerAdapter(customersList,getContext());
+
         rv = (RecyclerView) view.findViewById(R.id.customerrv);
         rv.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
         rv.setItemAnimator(new DefaultItemAnimator());
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         rv.setLayoutManager(layoutManager);
         rv.setAdapter(adapter);
-        getCustomers();
         return view;
     }
 
@@ -174,6 +177,13 @@ public class customers extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        getCustomers();
+        if(customersList!=null && adapter!=null){
+            customersList.clear();
+            customersList.addAll(Helper.getCustomerList());
+            adapter.notifyDataSetChanged();
+        }
+
     }
+
+
 }

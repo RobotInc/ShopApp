@@ -1,12 +1,55 @@
 package in.beyonitysoftwares.shopapp.utils;
 
+import android.util.Log;
+
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
+
+import in.beyonitysoftwares.shopapp.activities.mainApp;
+import in.beyonitysoftwares.shopapp.config.AppConfig;
+import in.beyonitysoftwares.shopapp.fragments.customers;
+import in.beyonitysoftwares.shopapp.fragments.invoices;
+import in.beyonitysoftwares.shopapp.fragments.products;
+import in.beyonitysoftwares.shopapp.model.Product;
+import in.beyonitysoftwares.shopapp.model.customer;
 
 public class Helper {
 
     static SortedMap<String,String> statecode = new TreeMap<>();
+    static List<customer> customerList = new ArrayList<>();
+    static List<Product> productList = new ArrayList<>();
+    static invoices invoice;
+    static customers customer;
+    static products product;
+    private static final String TAG = "Helper";
+
+    public static invoices getInvoice() {
+        return invoice;
+    }
+
+    public static customers getCustomer() {
+        return customer;
+    }
+
+    public static products getProduct() {
+        return product;
+    }
+
     public static void setupHelper(){
+        invoice = new invoices();
+        customer = new customers();
+        product = new products();
 
         statecode.put("Andaman and Nicobar Islands","35");
         statecode.put("Andhra Pradesh","37");
@@ -44,6 +87,7 @@ public class Helper {
         statecode.put("Uttar Pradesh","09");
         statecode.put("Uttarakhand","05");
         statecode.put("West Bengal","19");
+
     }
     public static SortedMap<String,String> getStatecode(){
         return statecode;
@@ -53,4 +97,88 @@ public class Helper {
         return statecode.get(stateName);
     }
 
+    public static void refreshCustomerList(){
+        AndroidNetworking.post(AppConfig.GET_CUSTOMER)
+                .addBodyParameter("name","name")
+                .setTag("Customers")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG, "onResponse: "+response);
+                        customerList.clear();
+                        try {
+                            boolean error = response.getBoolean("error");
+                            if(!error){
+                                JSONArray array = response.getJSONArray("customers");
+                                for(int a = 0;a<array.length();a++){
+                                    JSONObject object = array.getJSONObject(a);
+                                    customer c = new customer();
+                                    c.setName(object.getString("name"));
+                                    c.setAddress(object.getString("address"));
+                                    customerList.add(c);
+                                }
+
+                               //mainApp.refreshCutomers();
+                                customer.onResume();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.d(TAG, "onError: "+anError.getErrorDetail());
+                    }
+                });
+
+    }
+
+    public static void refreshProductList(){
+        AndroidNetworking.post(AppConfig.GET_PRODUCT)
+                .addBodyParameter("name","name")
+                .setTag("Products")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG, "onResponse: "+response);
+                        productList.clear();
+                        try {
+                            boolean error = response.getBoolean("error");
+                            if(!error){
+                                JSONArray array = response.getJSONArray("products");
+                                for(int a = 0;a<array.length();a++){
+                                    JSONObject object = array.getJSONObject(a);
+                                    Product p = new Product();
+                                    p.setName(object.getString("name"));
+                                    productList.add(p);
+                                }
+
+                               // mainApp.refreshProducts();
+                                product.onResume();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.d(TAG, "onError: "+anError.getErrorDetail());
+                    }
+                });
+
+    }
+
+    public static List<customer> getCustomerList() {
+        return customerList;
+    }
+
+    public static List<Product> getProductList() {
+        return productList;
+    }
 }
