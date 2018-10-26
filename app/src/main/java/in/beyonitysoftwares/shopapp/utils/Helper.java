@@ -21,14 +21,17 @@ import in.beyonitysoftwares.shopapp.config.AppConfig;
 import in.beyonitysoftwares.shopapp.fragments.customers;
 import in.beyonitysoftwares.shopapp.fragments.invoices;
 import in.beyonitysoftwares.shopapp.fragments.products;
+import in.beyonitysoftwares.shopapp.model.Invoice;
 import in.beyonitysoftwares.shopapp.model.Product;
 import in.beyonitysoftwares.shopapp.model.customer;
+import in.beyonitysoftwares.shopapp.model.item;
 
 public class Helper {
 
     static SortedMap<String,String> statecode = new TreeMap<>();
     static List<customer> customerList = new ArrayList<>();
     static List<Product> productList = new ArrayList<>();
+    static List<Invoice> invoiceList = new ArrayList<>();
     static invoices invoice;
     static customers customer;
     static products product;
@@ -173,6 +176,98 @@ public class Helper {
                 });
 
     }
+    public static void refreshInvoiceList(){
+        AndroidNetworking.post(AppConfig.GET_INVOICE)
+                .addBodyParameter("name","name")
+                .setTag("Products")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG, "onResponse: "+response);
+                        productList.clear();
+                        try {
+                            boolean error = response.getBoolean("error");
+                            if(!error){
+                                JSONArray array = response.getJSONArray("invoices");
+                                for(int a = 0;a<array.length();a++){
+                                    JSONObject object = array.getJSONObject(a);
+                                    Invoice invoice = new Invoice();
+                                    invoice.setInvoiceId(object.getString("id"));
+                                    invoice.setInvoiceNo(object.getString("invoice_no"));
+                                    invoice.setDate(object.getString("invoice_date"));
+                                    invoice.setCustomerid1(object.getString("customerid1"));
+                                    invoice.setCustomerid2(object.getString("customerid2"));
+                                    invoice.setTransport(object.getString("transport"));
+                                    getItemList(object.getString("id"));
+                                }
+
+                                // mainApp.refreshProducts();
+                                //product.onResume();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.d(TAG, "onError: "+anError.getErrorDetail());
+                    }
+                });
+
+    }
+
+    public static void getItemList(String invoiceID){
+        ArrayList<item> itemList = new ArrayList<>();
+        AndroidNetworking.post(AppConfig.GET_INVOICEITEMSBYID)
+                .addBodyParameter("id",invoiceID)
+                .setTag("Products")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG, "onResponse: "+response);
+                        productList.clear();
+                        try {
+                            boolean error = response.getBoolean("error");
+                            if(!error){
+                                JSONArray array = response.getJSONArray("invoiceitems");
+                                for(int a = 0;a<array.length();a++){
+                                    JSONObject object = array.getJSONObject(a);
+                                    item i = new item();
+                                    i.setProduct(object.getString("productID"));
+                                    i.setQty(object.getString("qty"));
+                                    i.setPrice(object.getString("price"));
+                                    itemList.add(i);
+
+                                }
+
+                                for(Invoice in : invoiceList){
+                                    if(in.getInvoiceId().equals(invoiceID)){
+                                        invoiceList.get(invoiceList.indexOf(in)).setItems(itemList);
+                                        break;
+                                    }
+                                }
+
+                                // mainApp.refreshProducts();
+                                //product.onResume();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.d(TAG, "onError: "+anError.getErrorDetail());
+                    }
+                });
+
+    }
+
 
     public static List<customer> getCustomerList() {
         return customerList;
@@ -180,5 +275,9 @@ public class Helper {
 
     public static List<Product> getProductList() {
         return productList;
+    }
+
+    public static List<Invoice> getInvoiceList() {
+        return invoiceList;
     }
 }

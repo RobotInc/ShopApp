@@ -130,6 +130,7 @@ public class mainApp extends AppCompatActivity {
         appbar.setText("M M Textiles - Invoices");
         Helper.refreshCustomerList();
         Helper.refreshProductList();
+        Helper.refreshInvoiceList();
     }
 
 }

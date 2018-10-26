@@ -3,13 +3,15 @@ package in.beyonitysoftwares.shopapp.model;
 public class item {
 
 
-    String product;
-    String baleNo;
+    String productid;
     String qty;
     String price;
     String total;
     String gstTax;
     String totalgst;
+
+    public item() {
+    }
 
     public String getGstTax() {
         return gstTax;
@@ -35,10 +37,10 @@ public class item {
         this.total = total;
     }
 
-    public item(String product, String baleNo, String qty, String price, String total, String gstTax, String totalgst) {
+    public item(String productid, String qty, String price, String total, String gstTax, String totalgst) {
 
-        this.product = product;
-        this.baleNo = baleNo;
+        this.productid = productid;
+
         this.qty = qty;
         this.price = price;
         this.total = total;
@@ -46,20 +48,13 @@ public class item {
         this.totalgst = totalgst;
     }
 
-    public String getBaleNo() {
-        return baleNo;
-    }
-
-    public void setBaleNo(String baleNo) {
-        this.baleNo = baleNo;
-    }
 
     public String getProduct() {
-        return product;
+        return productid;
     }
 
     public void setProduct(String product) {
-        this.product = product;
+        this.productid = product;
     }
 
     public String getQty() {
