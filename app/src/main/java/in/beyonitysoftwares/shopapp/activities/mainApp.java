@@ -102,22 +102,6 @@ public class mainApp extends AppCompatActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         //createPdf(FileUtils.getAppPath(getApplicationContext()) + "123.pdf");
         appbar = (TextView) findViewById(R.id.appBarTitleTV);
-        add = (ImageView) findViewById(R.id.add);
-        add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(vg.getCurrentItem()==1){
-                    Intent intent = new Intent(mainApp.this,newCustomer.class);
-                    startActivity(intent);
-                }if(vg.getCurrentItem()==2){
-                    Intent intent = new Intent(mainApp.this,new_product.class);
-                    startActivity(intent);
-                }if (vg.getCurrentItem()==0){
-                    Intent intent = new Intent(mainApp.this,new_invoice.class);
-                    startActivity(intent);
-                }
-            }
-        });
 
         vg = (CustomViewPager) findViewById(R.id.vg);
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -133,4 +117,16 @@ public class mainApp extends AppCompatActivity {
         Helper.refreshInvoiceList();
     }
 
+    public void add(View view) {
+        if(vg.getCurrentItem()==1){
+            Intent intent = new Intent(mainApp.this,newCustomer.class);
+            startActivity(intent);
+        }if(vg.getCurrentItem()==2){
+            Intent intent = new Intent(mainApp.this,new_product.class);
+            startActivity(intent);
+        }if (vg.getCurrentItem()==0){
+            Intent intent = new Intent(mainApp.this,new_invoice.class);
+            startActivity(intent);
+        }
+    }
 }

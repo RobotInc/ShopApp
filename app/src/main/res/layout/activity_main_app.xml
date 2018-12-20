@@ -28,15 +28,8 @@
             android:textSize="20dp"
             android:text="M M Textiles"
             android:textStyle="bold" />
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/add"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="10dp"
-        android:clickable="true"
-        android:src="@drawable/ic_add_black_24dp"
-        />
+
+
 
     </RelativeLayout>
 
@@ -57,5 +50,13 @@
         android:background="?android:attr/windowBackground"
         android:layout_alignParentBottom="true"
         app:menu="@menu/navigation" />
-
+   <android.support.design.widget.FloatingActionButton
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_margin="10dp"
+       android:onClick="add"
+       android:backgroundTint="@color/white2"
+       android:src="@drawable/ic_add_circle_outline_black_24dp"
+       android:layout_alignParentRight="true"
+       android:layout_above="@+id/navigation"/>
 </RelativeLayout>

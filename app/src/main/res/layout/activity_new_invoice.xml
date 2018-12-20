@@ -148,12 +148,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/spinnershipto"/>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:id="@+id/placetoship"
-                    android:text="Shipping To Place"/>
+
 
                 <View
                     android:layout_width="match_parent"
@@ -185,6 +180,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/addproducts"
+                        android:onClick="add"
                         android:background="@color/colorPrimaryDark"
                         android:textColor="@color/white"
                         android:text="Add"/>

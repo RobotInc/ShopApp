@@ -133,7 +133,7 @@ public class Helper {
 
                     @Override
                     public void onError(ANError anError) {
-                        Log.d(TAG, "onError: "+anError.getErrorDetail());
+                        Log.d(TAG, "onError: customer list"+anError.getErrorDetail());
                     }
                 });
 
@@ -171,7 +171,7 @@ public class Helper {
 
                     @Override
                     public void onError(ANError anError) {
-                        Log.d(TAG, "onError: "+anError.getErrorDetail());
+                        Log.d(TAG, "onError: product list"+anError.getErrorDetail());
                     }
                 });
 
@@ -213,7 +213,7 @@ public class Helper {
 
                     @Override
                     public void onError(ANError anError) {
-                        Log.d(TAG, "onError: "+anError.getErrorDetail());
+                        Log.d(TAG, "onError: invoicelist "+anError.getErrorBody());
                     }
                 });
 

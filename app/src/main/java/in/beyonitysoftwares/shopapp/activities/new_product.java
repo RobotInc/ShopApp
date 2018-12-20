@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
@@ -20,7 +19,6 @@ import org.json.JSONObject;
 
 import in.beyonitysoftwares.shopapp.R;
 import in.beyonitysoftwares.shopapp.config.AppConfig;
-import in.beyonitysoftwares.shopapp.model.customer;
 import in.beyonitysoftwares.shopapp.utils.Helper;
 
 public class new_product extends AppCompatActivity {
@@ -30,7 +28,7 @@ public class new_product extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.add_product);
+        setContentView(R.layout.new_product);
         pname = (EditText) findViewById(R.id.pname);
         addproduct = (Button) findViewById(R.id.addproduct);
         addproduct.setOnClickListener(new View.OnClickListener() {

@@ -125,6 +125,7 @@ public class newCustomer extends AppCompatActivity {
                     c.setPincode(pincode.getText().toString());
                     c.setPhone(phone.getText().toString());
                     c.setRegistered(isRegistered);
+                    Log.d(TAG, "onClick: "+c);
                     regCustomer(c);
 
                 }else {
@@ -138,11 +139,14 @@ public class newCustomer extends AppCompatActivity {
 
 
     public void regCustomer(customer c){
-
+        int r = 0;
+        if(c.isRegistered()){
+            r = 1;
+        }
         AndroidNetworking.post(AppConfig.REG_CUSTOMER)
                 .addBodyParameter("name",c.getName())
                 .addBodyParameter("gstin",c.getGstin())
-                .addBodyParameter("registered",String.valueOf(c.isRegistered()))
+                .addBodyParameter("registered",String.valueOf(r ))
                 .addBodyParameter("address",c.getAddress())
                 .addBodyParameter("state",c.getState())
                 .addBodyParameter("pincode",c.getPincode())
@@ -169,7 +173,7 @@ public class newCustomer extends AppCompatActivity {
 
                     @Override
                     public void onError(ANError anError) {
-                        Log.d(TAG, "onError: "+anError.getErrorDetail());
+                        Log.d(TAG, "onError: customer "+anError.getResponse());
                     }
                 });
 
