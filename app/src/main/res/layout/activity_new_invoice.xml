@@ -198,11 +198,23 @@
                 <Button
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Add Invoice"
-                    android:id="@+id/addinvoice"
+                    android:text="Preview Invoice"
+                    android:id="@+id/preview"
+                    android:onClick="preview"
                     android:layout_marginTop="30dp"
                     android:textColor="@android:color/white"
-                    android:background="@color/colorAccent"/>
+                    android:background="@android:color/holo_red_dark"/>
+
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Add Invoice"
+                    android:id="@+id/addinvoice"
+                    android:onClick="addinvoice"
+                    android:layout_marginTop="30dp"
+                    android:textColor="@android:color/white"
+                    android:background="@android:color/holo_green_dark"/>
 
             </LinearLayout>
 

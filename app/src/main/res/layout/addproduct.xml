@@ -17,6 +17,7 @@
     <Spinner
         android:layout_width="match_parent"
         android:padding="20dp"
+        android:id="@+id/addpro"
         android:layout_height="wrap_content"></Spinner>
 
     <TextView
@@ -25,19 +26,22 @@
         android:padding="20dp"
         android:textStyle="bold"
         android:textSize="16sp"
-        android:id="@+id/qty"
+
         android:text="Quantity"/>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="20dp"
+        android:inputType="number"
+        android:id="@+id/qty"
         android:hint="Enter Qty"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Price"
+
         android:textStyle="bold"
         android:textSize="16sp"
         android:padding="20dp"/>
@@ -46,6 +50,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/price"
+        android:inputType="number"
         android:padding="20dp"
         android:hint="Enter Price"/>
 

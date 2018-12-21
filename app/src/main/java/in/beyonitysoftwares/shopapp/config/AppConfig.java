@@ -6,7 +6,7 @@ public class AppConfig {
 	public static String REG_CUSTOMER = "https://mmtextiles.tk/shopapi/regc.php";
 	public static String GET_CUSTOMER = "https://mmtextiles.tk/shopapi/getcustomers.php";
 	public static String ADD_PRODUCT = "https://mmtextiles.tk/shopapi/newproduct.php";
-	public static String GET_PRODUCT = "https://mmtextiles.tk/shopapi/getinvoices.php";
+	public static String GET_PRODUCT = "https://mmtextiles.tk/shopapi/getproducts.php";
 	public static String GET_INVOICE = "https://mmtextiles.tk/shopapi/getinvoices.php";
 	public static String GET_INVOICEITEMS = "https://mmtextiles.tk/shopapi/getinvoiceitems.php";
 	public static String GET_INVOICEITEMSBYID = "https://mmtextiles.tk/shopapi/getinvoiceitemsbyinvoiceid.php";

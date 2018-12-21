@@ -158,6 +158,7 @@ public class Helper {
                                     JSONObject object = array.getJSONObject(a);
                                     Product p = new Product();
                                     p.setName(object.getString("name"));
+                                    p.setId(object.getString("id"));
                                     productList.add(p);
                                 }
 

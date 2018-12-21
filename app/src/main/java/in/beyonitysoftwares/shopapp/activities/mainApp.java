@@ -42,6 +42,7 @@ import in.beyonitysoftwares.shopapp.utils.Helper;
 
 public class mainApp extends AppCompatActivity {
     private static final String TAG = "mainApp";
+
     final int REQUEST_CODE_PERMISSION = 101;
     ViewPagerAdapter adapter;
     CustomViewPager vg;
@@ -115,6 +116,7 @@ public class mainApp extends AppCompatActivity {
         Helper.refreshCustomerList();
         Helper.refreshProductList();
         Helper.refreshInvoiceList();
+        checkPermissions();
     }
 
     public void add(View view) {
@@ -128,5 +130,54 @@ public class mainApp extends AppCompatActivity {
             Intent intent = new Intent(mainApp.this,new_invoice.class);
             startActivity(intent);
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_CODE_PERMISSION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                   /* Intent locationIntent = new Intent(MainActivity.this, MyLocationService.class);
+                    startService(locationIntent);
+                    bindService(locationIntent, serviceConnection, Context.BIND_AUTO_CREATE);
+                    Log.d(TAG, "onRequestPermissionsResult: called service");*/
+
+                } else {
+                    Toast.makeText(this, "Please Provide Required permission to work properly", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+            // other 'case' lines to check for other
+            // permissions this app might request.
+        }
+    }
+    public void checkPermissions(){
+        try {
+            if (ActivityCompat.checkSelfPermission(this, mPermission[0])
+                    != getPackageManager().PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(this,mPermission[1])!=getPackageManager().PERMISSION_GRANTED) {
+
+                ActivityCompat.requestPermissions(this, mPermission,
+                        REQUEST_CODE_PERMISSION);
+
+                // If any permission above not allowed by user, this condition will
+                // execute every time, else your else part will work
+            }else {
+
+                /*Intent locationIntent = new Intent(MainActivity.this, MyLocationService.class);
+                startService(locationIntent);
+                bindService(locationIntent, serviceConnection, Context.BIND_AUTO_CREATE);
+                Log.d(TAG, "checkPermissions: called service");
+*/
+
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 }
