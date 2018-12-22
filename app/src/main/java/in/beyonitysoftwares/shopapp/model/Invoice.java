@@ -3,6 +3,7 @@ package in.beyonitysoftwares.shopapp.model;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Invoice {
     String invoiceId;
@@ -11,7 +12,9 @@ public class Invoice {
     String customerid2;
     String invoiceNo;
     String transport;
-    String transportMode;
+    ArrayList<item> items = new ArrayList<>();
+
+
 
     public String getCustomerid1() {
         return customerid1;
@@ -37,7 +40,7 @@ public class Invoice {
         this.invoiceId = invoiceId;
     }
 
-    ArrayList<item> items;
+
 
     public Invoice() {
     }
@@ -68,13 +71,6 @@ public class Invoice {
         this.transport = transport;
     }
 
-    public String getTransportMode() {
-        return transportMode;
-    }
-
-    public void setTransportMode(String transportMode) {
-        this.transportMode = transportMode;
-    }
 
     public ArrayList<item> getItems() {
         return items;
