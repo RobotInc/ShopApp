@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -26,6 +27,7 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.itextpdf.io.font.FontConstants;
+import com.itextpdf.io.font.FontProgram;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.geom.PageSize;
@@ -210,7 +212,7 @@ public class mainApp extends AppCompatActivity {
     }
 
     public void createPdf(String dest) {
-
+        Typeface title = Typeface.createFromAsset(getAssets(), "fonts/CalibreBold.otf");
         if (new File(dest).exists()) {
             new File(dest).delete();
         }
@@ -244,21 +246,29 @@ public class mainApp extends AppCompatActivity {
         PdfFont font = PdfFontFactory.createFont("/assets/fonts/brandon_medium.otf");
         gstStyle.setFont(font).setFontSize(15);*/
             Style titleStyle = new Style();
-            PdfFont titleFont = PdfFontFactory.createFont(FontConstants.TIMES_BOLD);
-            titleStyle.setFont(titleFont).setFontSize(25);
+            PdfFont titleFont = PdfFontFactory.createFont(FontConstants.HELVETICA_BOLD);
+            //titleStyle.setFont(titleFont).setFontSize(18);
+            titleStyle.setFont(titleFont).setFontSize(15);
 
-            Paragraph title = new Paragraph("M.M. TEXTILES");
-            title.addStyle(titleStyle);
+
+            Style normalStyle = new Style();
+            PdfFont normalFont = PdfFontFactory.createFont(FontConstants.HELVETICA);
+            //normalStyle.setFont(titleFont).setFontSize(18);
+            normalStyle.setFont(normalFont).setFontSize(11);
+
+
+            Paragraph titletext = new Paragraph("M.M. TEXTILES");
+            titletext.addStyle(titleStyle);
 
 
             Paragraph address1 = new Paragraph("Prop: R.Mohan, #4/217, Utlaman Street,");
             Paragraph address2 = new Paragraph("Pamidi-515775, Anantapur Dist.(A.P.)");
 
-            topleft.add(title);
+            topleft.add(titletext);
             topleft.add(address1);
             topleft.add(address2);
             topleft.add("GSTIN: 37CUMPM0476N1ZW");
-            topleft.add("CELL: 9505953126");
+            topleft.add("Cell: 9505953126");
             // cell.addStyle(gstStyle);
             topleft.setTextAlignment(TextAlignment.LEFT);
             topleft.setBorder(Border.NO_BORDER);
@@ -269,42 +279,49 @@ public class mainApp extends AppCompatActivity {
             titleright.addStyle(titleStyle);
 
             topright.add(titleright);
-            topright.add("GST INVOICE NO: 185/2018-19");
-            topright.add("DATE: 22 DEC 2018");
-            topright.add("ORIGINAL COPY");
-            topright.add("TRANSPORT: VRL");
+            topright.add("GST Invoice No: 185/2018-19");
+            topright.add("Date: 22 DEC 2018");
+            topright.add("Original Copy");
+            topright.add("Transport: VRL");
 
             topright.setTextAlignment(TextAlignment.RIGHT);
             topright.setBorder(Border.NO_BORDER);
             table.addCell(topleft);
             table.addCell(topright);
 
+            topright.addStyle(normalStyle);
+            titleright.addStyle(titleStyle);
+
 
             Table shippingTable = new Table(2);
 
             Cell billedTo = new Cell();
 
-            billedTo.add(new Paragraph().add("BILL TO").setFont(titleFont).setFontSize(15));
-            Style para = new Style();
-            para.setFontSize(13f);
+            billedTo.add(new Paragraph().add("BILL TO").addStyle(titleStyle));
+
             Paragraph billingPara = new Paragraph();
             Paragraph shippingPara = new Paragraph();
 
 
-            billingPara.addStyle(para);
-            shippingPara.addStyle(para);
+            billingPara.addStyle(normalStyle);
+            shippingPara.addStyle(normalStyle);
 
-            billingPara.add("NAME: UDAY BHASKAR\nADDRESS: SECUNDERABAD\nGSTIN: 9742 6257 3125\nSTATE: TELENGANA\nCELL: 9640085648\n\n FROM : PAMIDI");
-            shippingPara.add("NAME: UDAY BHASKAR\nADDRESS: SECUNDERABAD\nGSTIN: 9742 6257 3125\nSTATE: TELENGANA\nCELL: 9640085648\n\n TO : BARGUR");
+            billingPara.add("Name: Uday Bhaskar\nAddress: Secunderabad\nGSTIN: 9742 6257 3125\nState: Telengana\nCell: 9640085648");
+            shippingPara.add("Name: Uday Bhaskar\nAddress: Secunderabad\nGSTIN: 9742 6257 3125\nState: Telengana\nCell: 9640085648");
+
+
+
             billedTo.add(billingPara);
+            billedTo.add(new Paragraph("\n From : Pamidi").setFont(titleFont).setFontSize(12));
 
 
             billedTo.setBorder(Border.NO_BORDER);
             Cell shippedTo = new Cell();
             shippedTo.setPaddingLeft(75f);
-            shippedTo.add(new Paragraph().add("SHIP TO").setFont(titleFont).setFontSize(15));
+            shippedTo.add(new Paragraph().add("SHIP TO").addStyle(titleStyle));
 
             shippedTo.add(shippingPara);
+            shippedTo.add(new Paragraph("\n To : Secunderabad").setFont(titleFont).setFontSize(12));
 
 
             shippedTo.setBorder(Border.NO_BORDER);
@@ -312,69 +329,112 @@ public class mainApp extends AppCompatActivity {
             shippingTable.addCell(shippedTo);
 
 
-            float[] columnWidths = {15, 50, 25, 25, 25, 40};
+            float[] columnWidths = {20, 65, 20, 20, 55};
             Table itemTable = new Table(columnWidths)
                     .setWidthPercent(100)
                     .setFixedLayout();
 
+            itemTable.addStyle(normalStyle);
+
             Cell sNoHeader = new Cell();
-            sNoHeader.add("SNO.").setTextAlignment(TextAlignment.CENTER);
+            sNoHeader.add("SNo.").setTextAlignment(TextAlignment.CENTER).setFont(titleFont);
 
             Cell descriptionHeader = new Cell();
-            descriptionHeader.add("Description").setTextAlignment(TextAlignment.CENTER);
+            descriptionHeader.add("Description").setTextAlignment(TextAlignment.CENTER).setFont(titleFont);
 
-            Cell baleHeader = new Cell();
-            baleHeader.add("Bale No.").setTextAlignment(TextAlignment.CENTER);
+
 
             Cell qtyHeader = new Cell().setTextAlignment(TextAlignment.CENTER);
-            qtyHeader.add("qty").setTextAlignment(TextAlignment.CENTER);
+            qtyHeader.add("qty").setTextAlignment(TextAlignment.CENTER).setFont(titleFont);
             Cell priceHeader = new Cell();
-            priceHeader.add("Price").setTextAlignment(TextAlignment.CENTER);
+            priceHeader.add("Price").setTextAlignment(TextAlignment.CENTER).setFont(titleFont);
             Cell amountHeader = new Cell();
-            amountHeader.add("Amount").setTextAlignment(TextAlignment.CENTER);
+            amountHeader.add("Amount").setTextAlignment(TextAlignment.CENTER).setFont(titleFont);
 
 
             itemTable.addHeaderCell(sNoHeader);
             itemTable.addHeaderCell(descriptionHeader);
-            itemTable.addHeaderCell(baleHeader);
+
             itemTable.addHeaderCell(qtyHeader);
             itemTable.addHeaderCell(priceHeader);
             itemTable.addHeaderCell(amountHeader);
 
             Cell sNo = new Cell();
+            sNo.add("1");
+            sNo.add("2");
+            sNo.add("3");
+            sNo.add("3");
+            sNo.add("3");
+            sNo.add("3");
+            sNo.add("3");
+            sNo.add("3");
+
             sNo.setTextAlignment(TextAlignment.CENTER);
-            sNo.setHeight(200f);
+
 
 
 
             Cell des = new Cell();
-            des.setHeight(200f);
+
+            des.add("FANCY");
+            des.add("KALYANI");
+            des.add("KALYANI MOTHER");
+            des.add("KALYANI MOTHER");
+            des.add("KALYANI MOTHER");
+            des.add("KALYANI MOTHER");
+            des.add("KALYANI MOTHER");
+            des.add("KALYANI MOTHER");
+
             des.setTextAlignment(TextAlignment.CENTER);
 
 
 
-            Cell baleNo = new Cell();
-            baleNo.setHeight(200f);
-            baleNo.setTextAlignment(TextAlignment.CENTER);
 
 
 
 
             Cell qty = new Cell();
-            qty.setHeight(200f);
+
+            qty.add("1500");
+            qty.add("1500");
+            qty.add("900");
+            qty.add("900");
+            qty.add("900");
+            qty.add("900");
+            qty.add("900");
+            qty.add("900");
+
             qty.setTextAlignment(TextAlignment.CENTER);
 
 
 
             Cell price = new Cell();
-            price.setHeight(200f);
+
+            price.add("114.29");
+            price.add("113.39");
+            price.add("112.49");
+            price.add("112.49");
+            price.add("112.49");
+            price.add("112.49");
+            price.add("112.49");
+            price.add("112.49");
+
             price.setTextAlignment(TextAlignment.CENTER);
 
 
 
 
             Cell amount = new Cell();
-            amount.setHeight(200f);
+
+            amount.add("99,99,999.99");
+            amount.add("99,99,999.99");
+            amount.add("99,99,999.99");
+            amount.add("99,99,999.99");
+            amount.add("99,99,999.99");
+            amount.add("99,99,999.99");
+            amount.add("99,99,999.99");
+            amount.add("99,99,999.99");
+
             amount.setTextAlignment(TextAlignment.RIGHT);
             amount.setPaddingRight(10f);
 
@@ -392,63 +452,79 @@ public class mainApp extends AppCompatActivity {
             amount.add(i.getTotal());
         }*/
 
-            itemTable.addCell("Sno");
-            itemTable.addCell("des");
-            itemTable.addCell("baleNo");
-            itemTable.addCell("qty");
-            itemTable.addCell("price");
-            itemTable.addCell("amount");
+            itemTable.addCell(sNo);
+            itemTable.addCell(des);
+            itemTable.addCell(qty);
+            itemTable.addCell(price);
+            itemTable.addCell(amount);
 
-            float[] columnWidthsTotal = {65, 25, 25,25, 40};
+            float[] columnWidthsTotal = {20, 65, 20, 20, 55};
             Table totalTable = new Table(columnWidthsTotal)
                     .setWidthPercent(100)
                     .setFixedLayout();
-
+            totalTable.addStyle(normalStyle);
             Cell TotalCell = new Cell();
             TotalCell.setTextAlignment(TextAlignment.CENTER);
             TotalCell.add("Total");
 
             Cell noOfBales = new Cell();
             noOfBales.setTextAlignment(TextAlignment.CENTER);
-            noOfBales.add("1");
+            noOfBales.add("13 (Bales)");
 
             Cell noOfItems = new Cell();
             noOfItems.setTextAlignment(TextAlignment.CENTER);
-            noOfItems.add(String.valueOf(qtyTotal));
+            noOfItems.add("2900");
 
-            Cell blankCell = new Cell();
+
             Cell totalAmount = new Cell();
             totalAmount.setTextAlignment(TextAlignment.RIGHT);
             totalAmount.setPaddingRight(10f);
-            totalAmount.add(String.valueOf(amountTotal));
+            totalAmount.add("99,99,999.00");
 
 
 
             totalTable.addCell(TotalCell);
             totalTable.addCell(noOfBales);
             totalTable.addCell(noOfItems);
-            totalTable.addCell(blankCell);
-            totalTable.addCell(totalAmount);
+            totalTable.addCell(new Cell().setBorderRight(Border.NO_BORDER));
+            totalTable.addCell(totalAmount.setBorderLeft(Border.NO_BORDER));
 
-            float[] columnWidthsGst = {90, 90};
+            float[] columnWidthsGst = {150, 45};
             Table gstTable = new Table(columnWidthsGst)
                     .setWidthPercent(100)
                     .setFixedLayout();
 
             Cell accountsCell = new Cell();
             accountsCell.setTextAlignment(TextAlignment.CENTER);
-            accountsCell.add("915010018109450\nIFSC UTIB00000332\n\n915010018109450\nIFSC UTIB0000332");
-            accountsCell.setHeight(90f);
+            accountsCell.add("AXIS BANK\n915010018109450\nIFSC UTIB00000332\n\nSTATE BANK OF INDIA\n915010018109450\nIFSC UTIB0000332").addStyle(normalStyle);
+
 
             Cell gstcell= new Cell();
+            gstcell.addStyle(normalStyle);
 
-
-            float[] columnWidthsigst = {50,40};
+            float[] columnWidthsigst = {50,85};
             Table igstTable = new Table(columnWidthsigst)
                     .setWidthPercent(100)
                     .setFixedLayout()
                     .setMarginLeft(-2f)
                     .setMarginRight(-2f);
+
+            Table discount = new Table(columnWidthsigst)
+                    .setWidthPercent(100)
+                    .setFixedLayout()
+                    .setMarginLeft(-2f)
+                    .setMarginTop(-2f)
+                    .setMarginRight(-2f);
+
+
+
+            Table subtotal = new Table(columnWidthsigst)
+                    .setWidthPercent(100)
+                    .setFixedLayout()
+                    .setMarginLeft(-2f)
+                    .setMarginRight(-2f);
+
+
 
             Table cgstTable = new Table(columnWidthsigst)
                     .setWidthPercent(100)
@@ -462,9 +538,24 @@ public class mainApp extends AppCompatActivity {
                     .setMarginLeft(-2f)
                     .setMarginRight(-2f);
 
-            Table extra = new Table(columnWidthsigst)
+            Table extra = new Table(new float[]{9,42})
                     .setWidthPercent(100)
+                    .setMarginBottom(-3f)
                     .setFixedLayout();
+
+            Cell discountcell = new Cell();
+            discountcell.add("Discount");
+            discountcell.setBorder(Border.NO_BORDER);
+            discountcell.setBorderBottom(new SolidBorder(.5f));
+            discountcell.setBorderRight(new SolidBorder(.5f));
+
+            Cell discountValue = new Cell();
+            discountValue.setTextAlignment(TextAlignment.RIGHT);
+            discountValue.setPaddingRight(10f);
+
+            discountValue.setBorder(Border.NO_BORDER);
+            discountValue.setBorderBottom(new SolidBorder(.5f));
+
 
 
             Cell igst = new Cell();
@@ -476,10 +567,22 @@ public class mainApp extends AppCompatActivity {
 
             Cell igstValue = new Cell();
             igstValue.setTextAlignment(TextAlignment.RIGHT);
-            igstValue.setPaddingRight(10f);
+            igstValue.setPaddingRight(12f);
 
             igstValue.setBorder(Border.NO_BORDER);
             igstValue.setBorderBottom(new SolidBorder(.5f));
+
+            Cell subcell = new Cell();
+            subcell.add("Subtotal");
+            subcell.setBorder(Border.NO_BORDER);
+            subcell.setBorderBottom(new SolidBorder(.5f));
+            subcell.setBorderRight(new SolidBorder(.5f));
+            Cell subValue = new Cell();
+            subValue.setTextAlignment(TextAlignment.RIGHT);
+            subValue.setPaddingRight(10f);
+
+            subValue.setBorder(Border.NO_BORDER);
+            subValue.setBorderBottom(new SolidBorder(.5f));
 
 
             Cell cgst = new Cell();
@@ -489,7 +592,7 @@ public class mainApp extends AppCompatActivity {
             cgst.setBorderRight(new SolidBorder(.5f));
             Cell cgstValue = new Cell();
             cgstValue.setTextAlignment(TextAlignment.RIGHT);
-            cgstValue.setPaddingRight(10f);
+            cgstValue.setPaddingRight(11.5f);
 
             cgstValue.setBorder(Border.NO_BORDER);
             cgstValue.setBorderBottom(new SolidBorder(.5f));
@@ -501,7 +604,7 @@ public class mainApp extends AppCompatActivity {
             sgst.setBorderRight(new SolidBorder(.5f));
             Cell sgstValue = new Cell();
             sgstValue.setTextAlignment(TextAlignment.RIGHT);
-            sgstValue.setPaddingRight(10f);
+            sgstValue.setPaddingRight(11f);
 
             sgstValue.setBorder(Border.NO_BORDER);
             sgstValue.setBorderBottom(new SolidBorder(.5f));
@@ -534,10 +637,16 @@ public class mainApp extends AppCompatActivity {
             extraValue.add(otherCharges);
         }*/
             five = (amountTotal*5)/100;
-            igstValue.add(String.valueOf(five));
+            igstValue.add("0.00");
+            discountValue.add("0.00");
+            subValue.add("0.00");
             cgstValue.add("0.00");
             sgstValue.add("0.00");
-            extraValue.add("100");
+            extraValue.add("100.00");
+            discount.addCell(discountcell);
+            discount.addCell(discountValue);
+            subtotal.addCell(subcell);
+            subtotal.addCell(subValue);
             igstTable.addCell(igst);
             igstTable.addCell(igstValue);
             cgstTable.addCell(cgst);
@@ -547,45 +656,55 @@ public class mainApp extends AppCompatActivity {
             extra.addCell(extraCharges);
             extra.addCell(extraValue);
 
-
-
+            gstcell.setMarginLeft(2f);
+            gstcell.add(discount);
+            gstcell.add(subtotal);
             gstcell.add(cgstTable);
             gstcell.add(sgstTable);
             gstcell.add(igstTable);
-            gstcell.add(extra);
+            gstcell.add(extra.setMarginLeft(-2f));
 
 
 
             gstTable.addCell(accountsCell);
             gstTable.addCell(gstcell);
 
-            float[] columnWidthsTotalValue = {90,50,40};
+            float[] columnWidthsTotalValue = {150, 45};
             Table invoiceTotal = new Table(columnWidthsTotalValue)
                     .setWidthPercent(100)
                     .setFixedLayout();
+            invoiceTotal.setBorder(Border.NO_BORDER);
             Cell invoiceTotalWords = new Cell();
-            invoiceTotalWords.add("Twenty Seven lakh Eighty Seven Thousand Seven Hundreed and Thirty three only");
+            invoiceTotal.setBorder(Border.NO_BORDER);
+            invoiceTotalWords.add("Twenty Seven lakh Eighty Seven Thousand Seven Hundreed and Thirty three");
             invoiceTotalWords.setFontSize(9f);
             Cell invoiceTotalcell = new Cell();
-            invoiceTotalcell.add("Invoice Total");
-            invoiceTotalcell.setTextAlignment(TextAlignment.LEFT);
 
-            Cell invoiceTotalAmount = new Cell();
-    /*    if(stateCode2.equals("37")){
-            double value = (twopointfive*2)+ Double.parseDouble(otherCharges)+amountTotal;
-            invoiceTotalAmount.add(String.valueOf(value));
+            Table invoice = new Table(new float[]{9,42})
+                    .setWidthPercent(100)
+                    .setBorder(Border.NO_BORDER)
+                    .setMarginTop(-2f)
+                    .setMarginBottom(-2f)
+                    .setFixedLayout();
 
-        }else {
-            double value = (five)+ Double.parseDouble(otherCharges)+amountTotal;
-            invoiceTotalAmount.add(String.valueOf(value));
-        }*/
-            double value = (five)+ Double.parseDouble("100")+amountTotal;
-            invoiceTotalAmount.add(String.valueOf(value));
-            invoiceTotalAmount.setTextAlignment(TextAlignment.RIGHT);
-            invoiceTotalAmount.setPaddingRight(10f);
+            Cell invoicecell = new Cell();
+            invoicecell.add("Invoice Total").setFont(titleFont);
+            invoicecell.setBorder(Border.NO_BORDER);
+
+            invoicecell.setBorderRight(new SolidBorder(.5f));
+            Cell invoiceValue = new Cell();
+            invoiceValue.setTextAlignment(TextAlignment.RIGHT);
+            invoiceValue.setPaddingRight(10f);
+
+            invoiceValue.setBorder(Border.NO_BORDER);
+
+            invoiceValue.add("99,99,999.00").setFont(titleFont);
+
+            invoice.addCell(invoicecell);
+            invoice.addCell(invoiceValue);
+            invoiceTotalcell.add(invoice);
             invoiceTotal.addCell(invoiceTotalWords);
             invoiceTotal.addCell(invoiceTotalcell);
-            invoiceTotal.addCell(invoiceTotalAmount);
 
             Paragraph form = new Paragraph();
             form.add("For");
