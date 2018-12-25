@@ -194,6 +194,28 @@
                     android:layout_marginTop="10dp"
                     android:id="@+id/addproductrv"/>
 
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:id="@+id/bales"
+                        android:hint="Enter No of Bales"
+                        />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:inputType="number"
+                    android:id="@+id/discount"
+                    android:hint="Enter Discount if any"/>
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/others"
+                    android:inputType="number"
+                    android:layout_marginTop="10dp"
+                    android:hint="Enter Other Charges if any"/>
 
                 <Button
                     android:layout_width="match_parent"

@@ -12,9 +12,34 @@ public class Invoice {
     String customerid2;
     String invoiceNo;
     String transport;
+    String discount;
+    String others;
+    String bales;
     ArrayList<item> items = new ArrayList<>();
 
+    public String getBales() {
+        return bales;
+    }
 
+    public void setBales(String bales) {
+        this.bales = bales;
+    }
+
+    public String getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(String discount) {
+        this.discount = discount;
+    }
+
+    public String getOthers() {
+        return others;
+    }
+
+    public void setOthers(String others) {
+        this.others = others;
+    }
 
     public String getCustomerid1() {
         return customerid1;

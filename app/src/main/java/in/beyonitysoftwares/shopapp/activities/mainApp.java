@@ -146,7 +146,7 @@ public class mainApp extends AppCompatActivity {
 
     public void add(View view) {
 
-        /*
+
         if(vg.getCurrentItem()==1){
             Intent intent = new Intent(mainApp.this,newCustomer.class);
             startActivity(intent);
@@ -157,9 +157,9 @@ public class mainApp extends AppCompatActivity {
             Intent intent = new Intent(mainApp.this,new_invoice.class);
             startActivity(intent);
         }
-        */
 
-        createPdf(FileUtils.getAppPath(getApplicationContext()) + "123.pdf");
+
+        //createPdf(FileUtils.getAppPath(getApplicationContext()) + "123.pdf");
     }
 
     @Override
@@ -212,7 +212,7 @@ public class mainApp extends AppCompatActivity {
     }
 
     public void createPdf(String dest) {
-        Typeface title = Typeface.createFromAsset(getAssets(), "fonts/CalibreBold.otf");
+
         if (new File(dest).exists()) {
             new File(dest).delete();
         }
