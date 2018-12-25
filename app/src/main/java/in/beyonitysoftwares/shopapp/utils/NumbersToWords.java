@@ -1,11 +1,11 @@
 package in.beyonitysoftwares.shopapp.utils;
 public class NumbersToWords {
-    private static final String[] NUMBERS_UP_TO_19 = { "zero", "one", "two",
-            "three", "four", "five", "six", "seven", "eight", "nine", "ten",
-            "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen",
-            "seventeen", "eighteen", "nineteen" };
-    private static final String[] MULTIPLES_OF_10 = { "", "", "twenty", "thirty",
-            "forty", "fifty", "sixty", "seventy", "eighty", "ninety" };
+    private static final String[] NUMBERS_UP_TO_19 = { "Zero", "One", "Two",
+            "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten",
+            "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen",
+            "Seventeen", "Eighteen", "Nineteen" };
+    private static final String[] MULTIPLES_OF_10 = { "", "", "Twenty", "Thirty",
+            "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety" };
     private final int number;
     private StringBuffer result = new StringBuffer();
 

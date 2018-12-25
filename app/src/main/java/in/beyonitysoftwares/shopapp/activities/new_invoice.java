@@ -771,7 +771,7 @@ public class new_invoice extends AppCompatActivity {
             invoiceTotal.setBorder(Border.NO_BORDER);
             TotalInvoice = ((Double.valueOf(amountTotal)-discountvalue)+five)+Double.parseDouble(invoice.getOthers());
 
-            invoiceTotalWords.add(NumbersToWords.convert((int) TotalInvoice));
+            invoiceTotalWords.add(NumbersToWords.convert((int) TotalInvoice)+" only");
             invoiceTotalWords.setFontSize(9f);
             Cell invoiceTotalcell = new Cell();
 
