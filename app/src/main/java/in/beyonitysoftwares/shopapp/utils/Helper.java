@@ -118,8 +118,12 @@ public class Helper {
                                 for(int a = 0;a<array.length();a++){
                                     JSONObject object = array.getJSONObject(a);
                                     customer c = new customer();
+                                    c.setId(Integer.parseInt(object.get("id").toString()));
+                                    c.setGstin(object.getString("gstin"));
                                     c.setName(object.getString("name"));
                                     c.setAddress(object.getString("address"));
+                                    c.setState(object.getString("state"));
+                                    c.setPhone(object.getString("phone"));
                                     customerList.add(c);
                                 }
 
