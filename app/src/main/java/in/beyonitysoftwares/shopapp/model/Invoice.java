@@ -15,6 +15,16 @@ public class Invoice {
     String discount;
     String others;
     String bales;
+    long datestamp;
+
+    public long getDatestamp() {
+        return datestamp;
+    }
+
+    public void setDatestamp(long datestamp) {
+        this.datestamp = datestamp;
+    }
+
     ArrayList<item> items = new ArrayList<>();
 
     public String getBales() {

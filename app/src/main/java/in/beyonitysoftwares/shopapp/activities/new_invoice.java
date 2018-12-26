@@ -19,6 +19,7 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.PopupMenu;
@@ -26,6 +27,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.itextpdf.io.font.FontConstants;
 import com.itextpdf.io.util.TextUtil;
 import com.itextpdf.kernel.font.PdfFont;
@@ -48,6 +53,9 @@ import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.property.AreaBreakType;
 import com.itextpdf.layout.property.TextAlignment;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -62,6 +70,7 @@ import java.util.Locale;
 import in.beyonitysoftwares.shopapp.R;
 import in.beyonitysoftwares.shopapp.adapters.customerAdapter;
 import in.beyonitysoftwares.shopapp.adapters.itemAdapter;
+import in.beyonitysoftwares.shopapp.config.AppConfig;
 import in.beyonitysoftwares.shopapp.model.Invoice;
 import in.beyonitysoftwares.shopapp.model.Product;
 import in.beyonitysoftwares.shopapp.model.customer;
@@ -75,7 +84,7 @@ public class new_invoice extends AppCompatActivity {
     EditText invoiceNo, date, bales, discount, others;
     private static final String TAG = "new_invoice";
     TextView yearview;
-    String[] tranposrts = {"Select Transport", "VRL", "SRMT", "SLRT", "NAVATHA", "APSRTC", "TSRTC", "HAND"};
+    String[] tranposrts = {"Select Transport", "VRL", "SRMT", "SLRT", "NAVATHA", "APSRTC", "TSRTC", "BY HAND","BY BUS"};
     String selectedTrans = "";
     long datetime = 0;
     int discountvalue = -1, othervalues = -1;
@@ -262,7 +271,7 @@ public class new_invoice extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
-
+        CheckBox isgst = (CheckBox) dialog.findViewById(R.id.isgst);
         Button add = (Button) dialog.findViewById(R.id.add);
         add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -272,11 +281,12 @@ public class new_invoice extends AppCompatActivity {
                         if (!TextUtils.isEmpty(price.getText())) {
                             item i = new item();
                             i.setProductid(productList.get(addpro.getSelectedItemPosition()).getId());
-                            i.setProduct(productList.get(addpro.getSelectedItemPosition()).getName());
+                            Log.d(TAG, "onClick: productid" +i.getProductid());
+                            i.setName(productList.get(addpro.getSelectedItemPosition()).getName());
                             Log.d(TAG, "onClick: " + productList.get(addpro.getSelectedItemPosition()).getName());
                             i.setQty(qty.getText().toString().trim());
                             i.setPrice(price.getText().toString().trim());
-
+                            i.setPricewithgst(isgst.isChecked());
                             itemList.add(i);
                             itemadapter.notifyDataSetChanged();
                             dialog.dismiss();
@@ -309,14 +319,21 @@ public class new_invoice extends AppCompatActivity {
 
                             //FileUtils.getAppPath(getApplicationContext()) + "123.pdf";
                             if (!TextUtils.isEmpty(bales.getText())) {
-
+                                    if(bales.getText().equals("0")){
+                                        Toast.makeText(this, "Enter Number of bales", Toast.LENGTH_SHORT).show();
+                                        bales.setError("Enter Number of bales");
+                                        return;
+                                    }
 
                                 if (!TextUtils.isEmpty(discount.getText())) {
+
                                     if (!TextUtils.isEmpty(others.getText())) {
                                         discountvalue = Integer.parseInt(discount.getText().toString());
                                         othervalues = Integer.parseInt(others.getText().toString());
                                         Invoice invoice = new Invoice();
-                                        invoice.setInvoiceNo(invoiceNo.getText().toString());
+                                        int year = myCalendar.get(Calendar.YEAR);
+                                        String finalyear = String.valueOf(year)+"-"+String.valueOf((year+1)).substring(2);
+                                        invoice.setInvoiceNo(invoiceNo.getText().toString()+"-"+finalyear);
                                         invoice.setCustomerid1(String.valueOf(customerList.get(customerid1.getSelectedItemPosition()).getId()));
                                         invoice.setCustomerid2(String.valueOf(customerList.get(customerid2.getSelectedItemPosition()).getId()));
                                         invoice.setDate(String.valueOf(myCalendar.getTimeInMillis()));
@@ -324,8 +341,9 @@ public class new_invoice extends AppCompatActivity {
                                         invoice.setDiscount(String.valueOf(discountvalue));
                                         invoice.setOthers(String.valueOf(othervalues));
                                         invoice.setItems((ArrayList<item>) itemList);
+                                        Log.d(TAG, "preview: "+itemList.get(0).getProductid());
                                         invoice.setBales(bales.getText().toString());
-                                        createPdf(FileUtils.getAppPath(getApplicationContext()) + invoice.getInvoiceNo(), invoice);
+                                        createPdf(FileUtils.getAppPath(getApplicationContext()) + invoice.getInvoiceNo()+".pdf", invoice);
                                     } else {
                                         discount.setError("Enter other charges if any otherwise enter 0");
                                         Toast.makeText(new_invoice.this, "Please Enter the Price", Toast.LENGTH_SHORT).show();
@@ -436,7 +454,7 @@ public class new_invoice extends AppCompatActivity {
             String[] copy = {"Original Copy","Duplicate Copy"};
 
             topright.add(titleright);
-            topright.add("GST Invoice No: " + invoice.getInvoiceNo() + "/2018-19");
+            topright.add("GST Invoice No: " + invoice.getInvoiceNo().replaceFirst("-","/"));
             topright.add("Date: " + date.getText().toString());
             topright.add(copy[0]);
             topright.add("Transport: " + invoice.getTransport());
@@ -541,13 +559,25 @@ public class new_invoice extends AppCompatActivity {
             double amountTotal = 0;
             for (item i : itemList) {
                 sNo.add(String.valueOf(++count));
-                des.add(i.getProduct());
+                des.add(i.getName());
                 qty.add(i.getQty());
                 qtyTotal = qtyTotal + Integer.parseInt(i.getQty());
-                double total = Double.parseDouble(i.getQty()) * Double.parseDouble(i.getPrice());
-                amountTotal = amountTotal + total;
-                price.add(String.valueOf(df.format(Double.parseDouble(i.getPrice()))));
-                amount.add(String.valueOf(df.format(total)));
+
+
+                if(i.isPricewithgst()){
+                    double actualprice = ((Double.parseDouble(i.getPrice())*100)/105);
+                    double total = Double.parseDouble(i.getQty()) * Double.parseDouble(df.format(actualprice));
+                    amountTotal = amountTotal + total;
+                    price.add(String.valueOf(df.format(actualprice)));
+                    amount.add(String.valueOf(df.format(total)));
+                }else {
+                    double total = Double.parseDouble(i.getQty()) * Double.parseDouble(i.getPrice());
+                    amountTotal = amountTotal + total;
+                    price.add(String.valueOf(df.format(Double.parseDouble(i.getPrice()))));
+                    amount.add(String.valueOf(df.format(total)));
+                }
+
+
             }
 
             itemTable.addCell(sNo);
@@ -914,4 +944,153 @@ public class new_invoice extends AppCompatActivity {
 
     }
 
+    public void addinvoice(View view) {
+
+        if (!TextUtils.isEmpty(invoiceNo.getText())) {
+            if (transportspinner.getSelectedItemPosition() != 0) {
+                if (customerid1.getSelectedItemPosition() != 0) {
+                    if (customerid2.getSelectedItemPosition() != 0) {
+                        if (itemList.size() != 0) {
+
+                            //FileUtils.getAppPath(getApplicationContext()) + "123.pdf";
+                            if (!TextUtils.isEmpty(bales.getText())) {
+
+
+                                if (!TextUtils.isEmpty(discount.getText())) {
+                                    if (!TextUtils.isEmpty(others.getText())) {
+                                        discountvalue = Integer.parseInt(discount.getText().toString());
+                                        othervalues = Integer.parseInt(others.getText().toString());
+                                        Invoice invoice = new Invoice();
+                                        int year = myCalendar.get(Calendar.YEAR);
+                                        String finalyear = String.valueOf(year)+"-"+String.valueOf((year+1)).substring(2);
+                                        invoice.setInvoiceNo(invoiceNo.getText().toString()+"-"+finalyear);
+                                        invoice.setCustomerid1(String.valueOf(customerList.get(customerid1.getSelectedItemPosition()).getId()));
+                                        invoice.setCustomerid2(String.valueOf(customerList.get(customerid2.getSelectedItemPosition()).getId()));
+                                        invoice.setDate(String.valueOf(myCalendar.getTimeInMillis()));
+                                        invoice.setTransport(tranposrts[transportspinner.getSelectedItemPosition()]);
+                                        invoice.setDiscount(String.valueOf(discountvalue));
+                                        invoice.setOthers(String.valueOf(othervalues));
+                                        invoice.setItems((ArrayList<item>) itemList);
+                                        Log.d(TAG, "preview: "+itemList.get(0).getProductid());
+
+                                        invoice.setDatestamp(myCalendar.getTimeInMillis());
+                                        invoice.setBales(bales.getText().toString());
+                                        //createPdf(FileUtils.getAppPath(getApplicationContext()) + invoice.getInvoiceNo()+".pdf", invoice);
+                                        insertinvoice(invoice);
+
+
+                                    } else {
+                                        discount.setError("Enter other charges if any otherwise enter 0");
+                                        Toast.makeText(new_invoice.this, "Please Enter the Price", Toast.LENGTH_SHORT).show();
+                                    }
+                                } else {
+
+                                    discount.setError("Enter discount if any otherwise enter 0");
+                                    Toast.makeText(new_invoice.this, "Please Enter the Quantity", Toast.LENGTH_SHORT).show();
+                                }
+
+                            } else {
+                                bales.setError("Please Enter No of Bales");
+                                Toast.makeText(this, "Please Enter No of Bales", Toast.LENGTH_SHORT).show();
+                            }
+
+                        } else {
+                            Toast.makeText(this, "Please add Purchased Items", Toast.LENGTH_SHORT).show();
+                        }
+
+                    } else {
+                        Toast.makeText(this, "Select Shipping to Customer", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(this, "Select Billing to customer", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(this, "Select Transport", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            invoiceNo.setError("Please Enter Invoice No.");
+        }
+
+
+    }
+
+    void insertinvoice(Invoice invoice){
+        AndroidNetworking.post(AppConfig.NEW_INVOICE)
+                .addBodyParameter("date",String.valueOf(invoice.getDatestamp()))
+                .addBodyParameter("invoice_no",invoice.getInvoiceNo())
+                .addBodyParameter("cid1",invoice.getCustomerid1())
+                .addBodyParameter("cid2",invoice.getCustomerid2())
+                .addBodyParameter("transport",invoice.getTransport())
+                .addBodyParameter("discount",invoice.getDiscount())
+                .addBodyParameter("others",invoice.getOthers())
+                .addBodyParameter("bales",invoice.getBales())
+                .setPriority(Priority.HIGH)
+                .setTag("Invoice")
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG, "onResponse: "+response);
+                        try {
+                            boolean error = response.getBoolean("error");
+                            if(!error){
+                                JSONObject object = response.getJSONObject("invoice");
+                                String id = object.getString("id");
+                                Log.d(TAG, "onResponse: "+id);
+                                invoice.setInvoiceId(id);
+
+                                for(item i : invoice.getItems()){
+                                   insertitem(i,id);
+                                }
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.d(TAG, "onError: "+anError.getResponse());
+                    }
+                });
+
+
+    }
+
+    void insertitem(item i,String invoiceID){
+
+        int r = 0;
+        if(i.isPricewithgst()){
+            r = 1;
+        }
+
+        Log.d(TAG, "insertitem: "+i.getProductid());
+        Log.d(TAG, "insertitem: "+i.getQty());
+        Log.d(TAG, "insertitem: "+i.getPrice());
+        Log.d(TAG, "insertitem: "+invoiceID);
+        Log.d(TAG, "insertitem: "+i.isPricewithgst());
+
+
+        AndroidNetworking.post(AppConfig.NEW_ITEM)
+                .addBodyParameter("pid",i.getProductid())
+                .addBodyParameter("qty",i.getQty())
+                .addBodyParameter("price",i.getPrice())
+                .addBodyParameter("invoice_id",invoiceID)
+                .addBodyParameter("pricewithgst",String.valueOf(r))
+                .setPriority(Priority.HIGH)
+                .setTag("Item")
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG, "onResponse: "+response);
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.d(TAG, "onError: item "+anError.getResponse());
+                    }
+                });
+    }
 }

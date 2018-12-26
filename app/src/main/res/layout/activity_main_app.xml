@@ -29,7 +29,15 @@
             android:text="M M Textiles"
             android:textStyle="bold" />
 
-
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:id="@+id/refresh"
+            android:padding="5dp"
+            android:src="@drawable/ic_refresh_black_24dp"
+            android:background="@android:color/transparent"/>
 
     </RelativeLayout>
 

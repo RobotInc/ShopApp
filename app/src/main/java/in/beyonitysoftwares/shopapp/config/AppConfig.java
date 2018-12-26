@@ -10,6 +10,8 @@ public class AppConfig {
 	public static String GET_INVOICE = "https://mmtextiles.tk/shopapi/getinvoices.php";
 	public static String GET_INVOICEITEMS = "https://mmtextiles.tk/shopapi/getinvoiceitems.php";
 	public static String GET_INVOICEITEMSBYID = "https://mmtextiles.tk/shopapi/getinvoiceitemsbyinvoiceid.php";
+	public static String NEW_INVOICE = "https://mmtextiles.tk/shopapi/newinvoice.php";
+	public static String NEW_ITEM = "https://mmtextiles.tk/shopapi/newitem.php";
 
 
 

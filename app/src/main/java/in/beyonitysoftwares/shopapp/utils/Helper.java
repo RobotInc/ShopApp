@@ -201,10 +201,14 @@ public class Helper {
                                     Invoice invoice = new Invoice();
                                     invoice.setInvoiceId(object.getString("id"));
                                     invoice.setInvoiceNo(object.getString("invoice_no"));
-                                    invoice.setDate(object.getString("invoice_date"));
+                                    invoice.setDatestamp(Long.parseLong(object.getString("invoice_date")));
                                     invoice.setCustomerid1(object.getString("customerid1"));
                                     invoice.setCustomerid2(object.getString("customerid2"));
                                     invoice.setTransport(object.getString("transport"));
+                                    invoice.setBales(object.getString("bales"));
+                                    invoice.setDiscount(object.getString("discount"));
+                                    invoice.setOthers(object.getString("others"));
+
                                     getItemList(object.getString("id"));
                                 }
 
@@ -235,7 +239,7 @@ public class Helper {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d(TAG, "onResponse: "+response);
-                        productList.clear();
+                        itemList.clear();
                         try {
                             boolean error = response.getBoolean("error");
                             if(!error){
@@ -243,9 +247,15 @@ public class Helper {
                                 for(int a = 0;a<array.length();a++){
                                     JSONObject object = array.getJSONObject(a);
                                     item i = new item();
-                                    i.setProduct(object.getString("productID"));
+                                    i.setProductid(object.getString("productID"));
                                     i.setQty(object.getString("qty"));
                                     i.setPrice(object.getString("price"));
+                                    if(object.get("pricewithgst").toString().equals(0)){
+                                        i.setPricewithgst(false);
+                                    }else {
+                                        i.setPricewithgst(true);
+                                    }
+
                                     itemList.add(i);
 
                                 }

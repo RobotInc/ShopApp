@@ -10,6 +10,15 @@ public class item {
     String total;
     String gstTax;
     String totalgst;
+    boolean pricewithgst;
+
+    public boolean isPricewithgst() {
+        return pricewithgst;
+    }
+
+    public void setPricewithgst(boolean pricewithgst) {
+        this.pricewithgst = pricewithgst;
+    }
 
     public String getProductid() {
         return productid;
@@ -66,13 +75,7 @@ public class item {
     }
 
 
-    public String getProduct() {
-        return productid;
-    }
 
-    public void setProduct(String product) {
-        this.productid = product;
-    }
 
     public String getQty() {
         return qty;

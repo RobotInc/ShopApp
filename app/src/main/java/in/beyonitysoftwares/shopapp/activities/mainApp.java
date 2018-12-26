@@ -18,6 +18,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -71,6 +72,7 @@ public class mainApp extends AppCompatActivity {
     final int REQUEST_CODE_PERMISSION = 101;
     ViewPagerAdapter adapter;
     CustomViewPager vg;
+    ImageButton refresh;
     SessionManager session;
     SQLiteSignInHandler db;
     int RC_SIGN_IN = 1;
@@ -128,7 +130,16 @@ public class mainApp extends AppCompatActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         //createPdf(FileUtils.getAppPath(getApplicationContext()) + "123.pdf");
         appbar = (TextView) findViewById(R.id.appBarTitleTV);
-
+        refresh = (ImageButton) findViewById(R.id.refresh);
+        refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.refreshCustomerList();
+                Helper.refreshProductList();
+                Helper.refreshInvoiceList();
+                Toast.makeText(mainApp.this, "refreshed database", Toast.LENGTH_SHORT).show();
+            }
+        });
         vg = (CustomViewPager) findViewById(R.id.vg);
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(Helper.getInvoice(),"");
@@ -137,6 +148,7 @@ public class mainApp extends AppCompatActivity {
         adapter.addFragment(new settings(),"");
         vg.setAdapter(adapter);
         vg.setPagingEnabled(false);
+
         appbar.setText("M M Textiles - Invoices");
         Helper.refreshCustomerList();
         Helper.refreshProductList();

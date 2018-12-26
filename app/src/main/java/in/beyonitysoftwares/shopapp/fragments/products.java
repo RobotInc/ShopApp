@@ -88,6 +88,7 @@ public class products extends Fragment {
         productList.clear();
         productList.addAll(Helper.getProductList());
         adapter = new ProductAdapter(productList,getContext());
+
     }
 
     @Override
@@ -181,6 +182,7 @@ public class products extends Fragment {
         if(productList!=null && adapter!=null) {
             productList.clear();
             productList.addAll(Helper.getProductList());
+            Log.d(TAG, "onResume: "+Helper.getProductList().size());
             adapter.notifyDataSetChanged();
         }
     }
