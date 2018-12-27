@@ -1,6 +1,7 @@
 package in.beyonitysoftwares.shopapp.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -10,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -17,6 +19,9 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.github.ybq.android.spinkit.sprite.Sprite;
+import com.github.ybq.android.spinkit.style.Circle;
+import com.github.ybq.android.spinkit.style.DoubleBounce;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,6 +38,7 @@ public class newCustomer extends AppCompatActivity {
     private static final String TAG = "newCustomer";
     ImageView back;
     Spinner states;
+    ProgressBar progressBar;
     ArrayAdapter stateAdapter;
     List<String> stateList = new ArrayList<>();
     Button addcustomer;
@@ -44,7 +50,12 @@ public class newCustomer extends AppCompatActivity {
         setContentView(R.layout.reg_customer);
         back = (ImageView) findViewById(R.id.back);
 
+        progressBar = (ProgressBar)findViewById(R.id.progressbar);
+        Sprite doubleBounce = new Circle();
+        doubleBounce.setColor(Color.RED);
 
+        progressBar.setIndeterminateDrawable(doubleBounce);
+        progressBar.setVisibility(View.INVISIBLE);
         tradename = (EditText) findViewById(R.id.tradename);
 
         gstin= (EditText) findViewById(R.id.gstin);
@@ -127,6 +138,7 @@ public class newCustomer extends AppCompatActivity {
                     c.setRegistered(isRegistered);
                     Log.d(TAG, "onClick: "+c);
                     regCustomer(c);
+                    progressBar.setVisibility(View.VISIBLE);
 
                 }else {
                     gstin.setError("Enter Valid Text");
@@ -163,20 +175,35 @@ public class newCustomer extends AppCompatActivity {
                             if(!error){
                                 Toast.makeText(newCustomer.this, "Successfully added Customer", Toast.LENGTH_SHORT).show();
                                 Helper.refreshCustomerList();
+                                clear();
                             }else {
                                 Toast.makeText(newCustomer.this, "Error Adding the customer to the list", Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
+                            progressBar.setVisibility(View.INVISIBLE);
+                            Toast.makeText(newCustomer.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                             e.printStackTrace();
                         }
+                        progressBar.setVisibility(View.INVISIBLE);
                     }
 
                     @Override
                     public void onError(ANError anError) {
+                        progressBar.setVisibility(View.INVISIBLE);
+                        Toast.makeText(newCustomer.this, anError.getErrorDetail(), Toast.LENGTH_SHORT).show();
                         Log.d(TAG, "onError: customer "+anError.getResponse());
                     }
                 });
 
 
+    }
+
+    void clear(){
+        tradename.setText("");
+        address.setText("");
+        gstin.setText("");
+        pincode.setText("");
+        phone.setText("");
+        states.setSelection(0);
     }
 }

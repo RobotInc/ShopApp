@@ -49,4 +49,6 @@ dependencies {
 
     implementation group: 'org.slf4j', name: 'slf4j-android', version: '1.7.25'
     api 'com.google.guava:guava:26.0-android'
+    implementation 'com.github.ybq:Android-SpinKit:1.2.0'
+    implementation 'com.jaredrummler:cyanea:1.0.1'
 }

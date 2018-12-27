@@ -14,7 +14,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedMap;
+import java.util.SortedSet;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 import in.beyonitysoftwares.shopapp.activities.mainApp;
 import in.beyonitysoftwares.shopapp.config.AppConfig;
@@ -35,6 +37,7 @@ public class Helper {
     static invoices invoice;
     static customers customer;
     static products product;
+
     private static final String TAG = "Helper";
 
     public static invoices getInvoice() {
@@ -50,6 +53,7 @@ public class Helper {
     }
 
     public static void setupHelper(){
+
         invoice = new invoices();
         customer = new customers();
         product = new products();
@@ -111,6 +115,8 @@ public class Helper {
                     public void onResponse(JSONObject response) {
                         Log.d(TAG, "onResponse: "+response);
                         customerList.clear();
+                        List<customer> dummylist = new ArrayList<>();
+                        SortedSet<String> sortedSet = new TreeSet();
                         try {
                             boolean error = response.getBoolean("error");
                             if(!error){
@@ -124,9 +130,16 @@ public class Helper {
                                     c.setAddress(object.getString("address"));
                                     c.setState(object.getString("state"));
                                     c.setPhone(object.getString("phone"));
-                                    customerList.add(c);
+                                    dummylist.add(c);
+                                    sortedSet.add(object.getString("name"));
                                 }
-
+                                for (String s : sortedSet){
+                                    for (customer c : dummylist){
+                                        if(s.equals(c.getName())){
+                                            customerList.add(c);
+                                        }
+                                    }
+                                }
                                //mainApp.refreshCutomers();
                                 customer.onResume();
                             }
@@ -166,7 +179,7 @@ public class Helper {
                                     productList.add(p);
                                 }
 
-                               // mainApp.refreshProducts();
+                               //mainApp.refreshProducts();
                                 product.onResume();
                             }
                         } catch (JSONException e) {
@@ -184,14 +197,14 @@ public class Helper {
     public static void refreshInvoiceList(){
         AndroidNetworking.post(AppConfig.GET_INVOICE)
                 .addBodyParameter("name","name")
-                .setTag("Products")
+                .setTag("invoices")
                 .setPriority(Priority.HIGH)
                 .build()
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d(TAG, "onResponse: "+response);
-                        productList.clear();
+                        invoiceList.clear();
                         try {
                             boolean error = response.getBoolean("error");
                             if(!error){
@@ -208,12 +221,12 @@ public class Helper {
                                     invoice.setBales(object.getString("bales"));
                                     invoice.setDiscount(object.getString("discount"));
                                     invoice.setOthers(object.getString("others"));
-
+                                    invoiceList.add(invoice);
                                     getItemList(object.getString("id"));
                                 }
 
                                 // mainApp.refreshProducts();
-                                //product.onResume();
+                                invoice.onResume();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

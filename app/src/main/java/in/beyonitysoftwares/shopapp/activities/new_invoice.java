@@ -225,6 +225,17 @@ public class new_invoice extends AppCompatActivity {
         p.setName("Select Product");
         productList.add(p);
         productList.addAll(Helper.getProductList());
+        try{
+            for(customer c : customerList){
+                if(String.valueOf(c.getId()).equals(getIntent().getExtras().get("cid").toString())){
+                    customerid1.setSelection(customerList.indexOf(c));
+                    customerid2.setSelection(customerList.indexOf(c));
+                    break;
+                }
+            }
+        }catch (NullPointerException e){
+            Log.d(TAG, "onCreate: "+e.getMessage());
+        }
 
     }
 
